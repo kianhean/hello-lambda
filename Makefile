@@ -23,7 +23,11 @@ clean:
 	rm -f ${DELIVERABLE}
 
 # Rebuild the delivrable
+# Compress Packages by removing *.so
+# https://serverlesscode.com/post/deploy-scikitlearn-on-lamba/
 build:
 	$(eval VENV = $(shell pipenv --venv))
+	find "${VENV}/lib/python3.6/site-packages" -name "*.so" | xargs strip
+	pushd "${VENV}/lib/python3.6/site-packages"
 	cd ${VENV}/lib/python3.6/site-packages && zip -r9 ${DELIVERABLE} ./*
 	zip -r9 ${DELIVERABLE} *.py
